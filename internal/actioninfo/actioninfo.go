@@ -1,9 +1,29 @@
 package actioninfo
 
+import (
+	"fmt"
+	"log"
+)
+
+// DataParser описывает типы, которые умеют разбирать строку с данными
+// и формировать строку с информацией об активности.
 type DataParser interface {
-	// TODO: добавить методы
+	Parse(datastring string) error
+	ActionInfo() (string, error)
 }
 
+// Info перебирает строки данных, разбирает каждую и выводит информацию.
 func Info(dataset []string, dp DataParser) {
-	// TODO: реализовать функцию
+	for _, data := range dataset {
+		if err := dp.Parse(data); err != nil {
+			log.Println(err)
+			continue
+		}
+		info, err := dp.ActionInfo()
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		fmt.Println(info)
+	}
 }
